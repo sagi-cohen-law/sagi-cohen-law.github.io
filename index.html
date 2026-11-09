@@ -29,15 +29,15 @@ button{font:inherit;font-weight:600;padding:10px 22px;border:0;border-radius:10p
 <body>
 <main>
 <h1>מחשבון הפרשי הצמדה</h1>
-<p class="sum">לפי נוסחת קובץ תחשיב הדוגמה של משרד הבינוי והשיכון (נספח 1). מזינים שלושה נתונים ולוחצים "חשב".</p>
+<p class="sum">לפי נוסחת קובץ תחשיב הדוגמה של משרד הבינוי והשיכון (נספח 1). מזינים מחיר ותאריך חתימה ולוחצים "חשב".</p>
 <div class="card">
 <h2>נתונים</h2>
 <label for="p">מחיר דירה חוזי (₪)</label>
 <input id="p" inputmode="decimal" placeholder="לדוגמה 1,231,617">
 <label for="s">תאריך חתימת חוזה</label>
 <input id="s" type="date">
-<label for="d">תאריך מסירה</label>
-<input id="d" type="date">
+<label>תאריך מסירה (קבוע לכל הרוכשים)</label>
+<input value="31/07/2026" disabled>
 <button onclick="run()">חשב</button>
 <p id="err" class="err"></p>
 </div>
@@ -55,7 +55,7 @@ button{font:inherit;font-weight:600;padding:10px 22px;border:0;border-radius:10p
 <script>
 function calc(price,s,d){var G9=.025,G10=.2,G11=.1,G12=42;var G18=Math.min(G12,(d-s)/864e5/30);var G20=Math.max(Math.trunc(G18/6),1);var G19=(1-(G10+G11))/G20;var m=[6,12,18,24,30,36,40,42],cum=G10,t=0;m.forEach(function(mm){var done=Math.abs(cum-1)<1e-9;var a=done?0:(cum<.9-1e-12?G19:.1);var b=done?0:Math.min(mm,G18);t+=price*a*.5*(Math.pow(1+G9/12,b)-1);cum+=a});return{t:t,third:t/3,m:G18,n:G20}}
 function f(n){return n.toLocaleString('he-IL',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function run(){var p=parseFloat(document.getElementById('p').value.replace(/[,\s₪]/g,''));var s=document.getElementById('s').valueAsNumber,d=document.getElementById('d').valueAsNumber;var e=document.getElementById('err');if(!p||isNaN(s)||isNaN(d)||d<=s){e.textContent='נא להזין מחיר, ותאריך מסירה מאוחר מתאריך החתימה.';document.getElementById('res').style.display='none';return}e.textContent='';var r=calc(p,s,d);document.getElementById('third').textContent=f(r.third)+' ₪';document.getElementById('tot').textContent=f(r.t)+' ₪';document.getElementById('mon').textContent=f(r.m);document.getElementById('pay').textContent=r.n;document.getElementById('pct').textContent=(r.third/p*100).toFixed(2)+'%';document.getElementById('res').style.display='block'}
+function run(){var p=parseFloat(document.getElementById('p').value.replace(/[,\s₪]/g,''));var s=document.getElementById('s').valueAsNumber,d=Date.UTC(2026,6,31);var e=document.getElementById('err');if(!p||isNaN(s)||isNaN(d)||d<=s){e.textContent='נא להזין מחיר, ותאריך מסירה מאוחר מתאריך החתימה.';document.getElementById('res').style.display='none';return}e.textContent='';var r=calc(p,s,d);document.getElementById('third').textContent=f(r.third)+' ₪';document.getElementById('tot').textContent=f(r.t)+' ₪';document.getElementById('mon').textContent=f(r.m);document.getElementById('pay').textContent=r.n;document.getElementById('pct').textContent=(r.third/p*100).toFixed(2)+'%';document.getElementById('res').style.display='block'}
 document.getElementById('p').addEventListener('keydown',function(e){if(e.key==='Enter')run()});
 </script>
 </body>
